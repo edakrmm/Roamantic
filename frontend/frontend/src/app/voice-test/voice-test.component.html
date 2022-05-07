@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+        <div class="container-fluid">
+            <div class="row mt-4"> 
+                <div class="col-6">    
+                    <form #voiceTestPost="ngForm" (ngSubmit)="onSubmit(voiceTestPost.value)" (keydown.enter)="$event.preventDefault()">
+                        <div class="form-group">   
+                            <table style="margin-left: auto;margin-right: auto;">
+                                <thead>
+                                    <tr>
+                                        <td class="bg-primary" style="text-align:center" colspan="4"><h4>Parameters</h4></td>
+                                    </tr>
+                                </thead>
+                                <br>
+                                <tbody>  
+                                    <tr>
+                                        <td><label for="MCC">MCC</label></td>
+                                        <td><label for="MNC">MNC</label></td>
+                                        <td><label for="CC">CC</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input ngModel name="MCC" id="MCC" type="text"></td>
+                                        <td><input ngModel name="MNC" id="MNC" type="text"></td>
+                                        <td><input ngModel name="CC" id="CC" type="text"></td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td><label for="CBA">CBA</label></td>
+                                        <td><label for="MGT">MGT</label></td>
+                                        <td><label for="MAP">MAP Version</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input ngModel name="CBA" id="CBA" type="text"></td>
+                                        <td><input ngModel name="MGT" id="MGT" type="text"></td>
+                                        <td><select ngModel name="MAPversion" id="MAP">
+                                            <option style="display:none"></option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="3"><hr></td></tr>                         
+                                    <tr>
+                                        <td style="display:flex">
+                                            <input type="checkbox" name="camelchecked" [(ngModel)]="isCamelChecked">
+                                            <label for="camelchecked" id="label">Camel</label>
+                                        </td>
+                                        <td>
+                                            <select ngModel name="CAMELversion" [disabled]="!isCamelChecked">
+                                                <option style="display:none"></option>  
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="3"><hr></td></tr>                                              
+                                    <tr>
+                                        <td style="display:flex"><input type="checkbox" name="stpchecked" [(ngModel)]="isSTPChecked"><label for="stpchecked" id="label">STP Data</label></td>
+                                        <td><label for="SCCPRPLMN">SCCPRPLMN</label></td>
+                                        <td><label for="NRR">NRR (RRCDGT)</label></td>
+                                        <td><label for="NGT">NGT</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><input ngModel name="SCCPRPLMN" [disabled]="!isSTPChecked" type="text"></td>
+                                        <td><input ngModel name="NRR" id="NRR" [disabled]="!isSTPChecked" type="text"></td>
+                                        <td><input ngModel name="NGT" id="NGT" [disabled]="!isSTPChecked" type="text"></td>
+                                    </tr>
+                                    <tr><td colspan="3"><hr></td></tr>    
+                                    <tr>
+                                        <td></td>
+                                        <td><label for="IMSI">IMSI</label><input #imsiinput id="IMSI" type="text"></td>
+                                        <td>
+                                            <button (click)="addIMSI(imsiinput.value); imsiinput.value=''" style="float:left; margin-top: 10%;" type="button" class="badge bg-primary rounded-pill">ADD</button>
+                                        </td>
+                                    </tr>
+                                    <br>
+                                    <tr *ngFor="let imsi of IMSIList">
+                                        <td></td>
+                                        <td>
+                                            <ul class="list-group">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{imsi}}
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <button style="float:left;" (click)="deleteIMSI(imsi)" class="badge bg-primary rounded-pill">DEL</button>
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="3"><hr></td></tr>    
+                                    <tr>
+                                        <td style="display:flex">
+                                            <input type="checkbox" name="mscListChecked" (change)="checkUncheckAll()" [(ngModel)]="isMSCListChecked"><label id="label" for="mscListChecked"><b>MSC List</b></label>
+                                        </td>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <td colspan="4" style="display:flex">
+                                           <div style="display:flex;" *ngFor="let item of mscList" >
+                                                <input type="checkbox" name="item.msc" [(ngModel)]="item.isSelected"><label id="label"  for="item.msc">{{item.msc}}</label>
+                                           </div>                                         
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="3"><hr></td></tr>    
+                                    <tr>
+                                        <td style="display:flex">
+                                            <input type="checkbox" name="stpListChecked" (change)="checkUncheckAll()" [(ngModel)]="isSTPListChecked"><label id="label" for="stpListChecked"><b>STP List</b></label>
+                                        </td>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <td colspan="4" style="display:flex">
+                                                <div style="display:flex;" *ngFor="let item of stpList" >
+                                                <input type="checkbox" name="item.stp" [(ngModel)]="item.isSelected"><label id="label" for="item.stp">{{item.stp}}</label>
+                                                </div>                                     
+                                        </td>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div style="margin: auto;display:flex;justify-content: center;width:70%">
+                                                <button class="btn btn-primary border border-secondary" type="submit" (click)="onPrepClick()">Prepare</button>
+                                                <button class="btn btn-warning border border-secondary" id="exec" (click)="onExecClick()" >Execute</button>
+                                                <button class="btn btn-secondary border border-secondary" (click)="onRollClick()">Rollback</button>    
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                
+
+                <div class="col-6">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td class="bg-warning" style="text-align:center" colspan="4"><h4>Command Files</h4></td>
+                            </tr>
+                        </thead>
+                        <br>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="fs-6"><b>Data</b></label>
+                                </td>
+                                <td>
+                                    <button style="margin-left:40%; width: 40%;" class="border border-danger border-3 btn-hover-border" id=""><b>MSCS</b></button>
+                                </td>
+                                <td>
+                                    <button style="margin-left:40%; width: 40%;" class="border border-danger border-3" id="stpDataDownload" (click)="onstpDataDownloadClick()" disabled><b>STP</b></button>
+                                </td>                               
+                            </tr>
+                            <br>
+                            <tr>
+                                <td>
+                                    <label class="fs-6"><b>Logs</b></label>
+                                </td>
+                                <td>
+                                    <button style="margin-left:40%; width: 40%;" class="border border-warning border-3" id=""><b>MSCS</b></button>
+                                </td>
+                                <td>
+                                    <button style="margin-left:40%; width: 40%;" class="border border-warning border-3" id="stpLogsDownload"><b>STP</b></button>
+                                </td>                               
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
+        </div>
+    
+</body>
+</html>
